@@ -1,5 +1,6 @@
 const grid = document.querySelector('.grid');
-
+const spanPlayer = document.querySelector('.player');
+const timer = document.querySelector('.timer');
 const characters = ['beth','jerry','jessica','meeseeks','morty','pessoa-passaro','pickle-rick','rick','scroopy','summer'];
 
 const createElement = (tag, className) => {
@@ -11,8 +12,9 @@ const createElement = (tag, className) => {
 const checkEndGame = () => {
     const disabledCards = document.querySelectorAll('.disabled-Card');
 
-    if(disabledCards === 20) {
-        alert('Parabéns, você conseguiu!!');
+    if(disabledCards.length === 20) {
+        clearInterval(this.loop);
+        alert(`Parabéns, ${spanPlayer.innerHTML}! Seu tempo foi: ${timer.innerHTML}`);
     }
 }
 
@@ -46,9 +48,11 @@ let firstCard = '';
 let secondCard = '';
 
 const revealCard = ({target}) => {
-    if(target.parentNode.className.includes('reveal-card')){
+    if(target.parentNode.className.includes('reveal-Card')){
         return;
     }
+
+
     if(firstCard === ''){
         target.parentNode.classList.add('reveal-Card');
         firstCard = target.parentNode;
@@ -87,4 +91,16 @@ const loadGame = () => {
     });
 }
 
-loadGame();
+const startTimer = () => {
+    this.loop = setInterval(() => {
+        const currentTime = +timer.innerHTML;
+        timer.innerHTML = currentTime + 1;
+
+    },1000)
+}
+
+window.onload = () => {
+    spanPlayer.innerHTML = localStorage.getItem('player');
+    startTimer();
+    loadGame();
+}
